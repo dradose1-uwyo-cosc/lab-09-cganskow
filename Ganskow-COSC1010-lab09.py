@@ -35,14 +35,11 @@
 
 class Pizza:
     """A class to make the pizza"""
-    def __init__(self, size, sauce = "red"):
+    def __init__(self, size, sauce = "red", *toppings):
         """Initialize attributes to make a pizza"""
-        self.setSauce(size)
+        self.setSize(size)
         self.sauce = sauce
         self.toppings = ["cheese"]
-
-    def getSauce(self):
-        return self.sauce
     
     def setSize(self, size):
         if size.isalpha() or int(size) < 10:
@@ -111,15 +108,15 @@ class Pizzeria:
         sauce = input("What kind of sauce would you like? Leave blank for red sauce.")
         toppings = input("Please enter the toppings you would like. Seperate each topping with ','").split(",")
         pizza = Pizza(size, sauce, toppings)
-        self.pizzas.append(Pizza(pizza))
+        self.pizzas.append(pizza)
 
     def getPrice(self, pizzas, price_per_topping, price_per_inch):
         for pizza in pizzas:
-            price += (pizza.getSize() * price_per_inch) + (pizza.getAmountOfToppings() * price_per_topping)
+            price += (Pizza.getSize() * price_per_inch) + (Pizza.getAmountOfToppings() * price_per_topping)
         
-    def getReceipt(self, price_per_inch, price_per_topping):
-        pizza_size_price = int(Pizza.getSize()) * price_per_inch
-        pizza_topping_price = int(Pizza.getAmountOfToppings()) * price_per_topping
+    def getReceipt(self):
+        pizza_size_price = int(Pizza.getSize()) * self.price_per_inch
+        pizza_topping_price = int(Pizza.getAmountOfToppings()) * self.price_per_topping
         return f'You ordered a {Pizza.getSize()}" pizza with {Pizza.getSauce()} and the following toppings:{Pizza.getToppings()}\nYou ordered a {Pizza.getSize()} pizza for ${pizza_size_price}\nYou had {Pizza.getAmountOfToppings()} topping(s) for ${pizza_topping_price}\nYour total price is {Pizzeria.getPrice()}'
 
     def getNumberOfOrders(self, orders):
@@ -134,15 +131,15 @@ class Pizzeria:
 # - Repeat the loop as needed.
 # - AFTER the loop, print how many orders were placed.
 
-pizzeria = Pizzeria
+pizzeria = Pizzeria()
 
 while True:
     make_order = input("Would you like to place an order? exit to exit")
     if make_order.lower() == "exit":
         break
     elif make_order.lower() == "yes":
-        Pizzeria.placeOrder(pizzeria)
-        Pizzeria.getReceipt()
+        pizzeria.placeOrder()
+        pizzeria.getReceipt()
 
 print(Pizzeria.getNumberOfOrders())
 
