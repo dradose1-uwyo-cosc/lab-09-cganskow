@@ -39,7 +39,7 @@ class Pizza:
         """Initialize attributes to make a pizza"""
         self.setSize(size)
         self.setSauce(sauce)
-        self.toppings = ["cheese"] + self.addToppings(*toppings)
+        self.toppings = ["cheese"] + list(toppings)
     
     def setSize(self, size):
         if size.isalpha() or int(size) < 10:
@@ -60,11 +60,11 @@ class Pizza:
         return self.sauce
 
     def addToppings(self, *toppings):
-        self.toppings.extend(toppings)
-
+        self.toppings.append(toppings)
+    
     def getToppings(self):
         return self.toppings
-    
+  
     def getAmountOfToppings(self):
         return len(self.toppings)
 
@@ -114,7 +114,11 @@ class Pizzeria:
         self.orders += 1
         size = input("Please enter the size of the pizza, as a whole number. The smallest size is 10.")
         sauce = input("What kind of sauce would you like? Leave blank for red sauce.")
-        toppings = input("Please enter the toppings you would like. Seperate each topping with ','").split(",")
+        toppings = input("Please enter the toppings you would like. Seperate each topping with ','")
+        if toppings:
+            toppings = toppings.split(",")
+        else:
+            toppings = []
         pizza = Pizza(size, sauce, *toppings)
         self.pizzas.append(pizza)
 
@@ -125,7 +129,7 @@ class Pizzeria:
         pizza_size_price = int(pizza.getSize()) * self.price_per_inch
         pizza_topping_price = int(pizza.getAmountOfToppings()) * self.price_per_topping
         total_price = pizzeria.getPrice(pizza)
-        return f'You ordered a {pizza.getSize()}" pizza with {pizza.getSauce()} and the following toppings:{pizza.getToppings()}\nYou ordered a {pizza.getSize()} pizza for ${pizza_size_price}\nYou had {pizza.getAmountOfToppings()} topping(s) for ${pizza_topping_price}\nYour total price is {total_price}'
+        return f'You ordered a {pizza.getSize()}" pizza with {pizza.getSauce()} sauce and the following toppings:{pizza.getToppings()}\nYou ordered a {pizza.getSize()}" pizza for ${pizza_size_price}\nYou had {pizza.getAmountOfToppings()} topping(s) for ${pizza_topping_price}\nYour total price is ${total_price}'
 
     def getNumberOfOrders(self):
         return int(self.orders)
@@ -151,7 +155,7 @@ while True:
         receipt = pizzeria.getReceipt(last_pizza)
         print(receipt)
 
-print(pizzeria.getNumberOfOrders())
+print(f"You had {pizzeria.getNumberOfOrders()} orders.")
 
 # Example output:
 """
